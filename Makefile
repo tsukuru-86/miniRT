@@ -7,7 +7,7 @@ MLX_DIR = lib/minilibx_opengl_20191021
 MLX_INC = -I$(MLX_DIR)
 MLX_LIB = -L$(MLX_DIR) -lmlx -framework OpenGL -framework AppKit -lm
 
-SRCS := src/core/main.c src/core/vec3.c src/core/color.c src/rt/render.c
+SRCS := src/core/main.c src/core/vec3.c src/core/color.c src/rt/render.c src/parser/parse.c
 OBJS := $(SRCS:.c=.o)
 
 #テストを走らせたいときは make vec3_test && ./vec3_test → すぐ消す

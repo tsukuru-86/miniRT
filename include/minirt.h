@@ -6,4 +6,5 @@
 # include "structs.h"
 
 void	render_scene(void *mlx, void *win, t_scene *scene, int width, int height);
+int		parse_scene(const char *path, t_scene *out);
 #endif

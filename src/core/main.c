@@ -13,6 +13,16 @@ typedef struct s_app
 	t_scene	sc;
 }	t_app;
 
+static void	free_scene(t_scene *sc)
+{
+	if (sc->spheres) free(sc->spheres);
+	if (sc->planes) free(sc->planes);
+	if (sc->cylinders) free(sc->cylinders);
+	sc->spheres = NULL; sc->sphere_count = 0;
+	sc->planes = NULL; sc->plane_count = 0;
+	sc->cylinders = NULL; sc->cylinder_count = 0;
+}
+
 static int	on_key(int key, t_app *app)
 {
 	if (key == KEY_ESC)
@@ -25,6 +35,7 @@ static int	on_key(int key, t_app *app)
 #ifdef __linux__
 		mlx_destroy_display(app->mlx);
 #endif
+		free_scene(&app->sc);
 		free(app->mlx);
 		exit(0);
 	}
@@ -36,24 +47,17 @@ static int	on_close(t_app *app)
 	return (on_key(KEY_ESC, app));
 }
 
-int	main(void)
+int	main(int argc, char **argv)
 {
 	t_app	app;
 
-	app.sc.ambient_ratio = 0.2;
-	app.sc.ambient_color = color(255, 255, 255);
-	app.sc.cam.pos = (t_vec3){0, 0, 0};
-	app.sc.cam.dir = (t_vec3){0, 0, 1};
-	app.sc.cam.up = (t_vec3){0, 1, 0};
-	app.sc.cam.fov = 70.0;
-
-	app.sc.light.pos = (t_vec3){-2, 2, -1};
-	app.sc.light.ratio = 0.9;
-	app.sc.light.color = color(220, 40, 40);
-
-	app.sc.sp.center = (t_vec3){0, 0, 3};
-	app.sc.sp.diameter = 2.0;
-	app.sc.sp.color = color(200, 200, 200);
+	if (argc != 2)
+	{
+		printf("Usage: %s <scene.rt>\n", argv[0]);
+		return 1;
+	}
+	if (!parse_scene(argv[1], &app.sc))
+		return 1;
 
 	//以下セット
 	app.mlx = mlx_init();
