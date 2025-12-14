@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   vec3.c                                             :+:      :+:    :+:   */
+/*   color_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tsukuru <tsukuru@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,25 +10,38 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "vec3.h"
-#include <math.h>
+#include "color.h"
 
-t_vec3	vec_add(t_vec3 a, t_vec3 b)
+t_color	color_mul(t_color c1, t_color c2)
 {
-	return ((t_vec3){a.x + b.x, a.y + b.y, a.z + b.z});
+	return ((t_color){
+		(c1.r * c2.r) / 255,
+		(c1.g * c2.g) / 255,
+		(c1.b * c2.b) / 255
+	});
 }
 
-t_vec3	vec_sub(t_vec3 a, t_vec3 b)
+t_color	color_clamp(t_color c)
 {
-	return ((t_vec3){a.x - b.x, a.y - b.y, a.z - b.z});
+	t_color	res;
+
+	res = c;
+	if (res.r > 255)
+		res.r = 255;
+	if (res.r < 0)
+		res.r = 0;
+	if (res.g > 255)
+		res.g = 255;
+	if (res.g < 0)
+		res.g = 0;
+	if (res.b > 255)
+		res.b = 255;
+	if (res.b < 0)
+		res.b = 0;
+	return (res);
 }
 
-t_vec3	vec_scale(t_vec3 v, double s)
+t_color	rgb(int r, int g, int b)
 {
-	return ((t_vec3){v.x * s, v.y * s, v.z * s});
-}
-
-double	vec_dot(t_vec3 a, t_vec3 b)
-{
-	return (a.x * b.x + a.y * b.y + a.z * b.z);
+	return (color(r, g, b));
 }

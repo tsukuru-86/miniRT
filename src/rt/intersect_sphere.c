@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   vec3.c                                             :+:      :+:    :+:   */
+/*   intersect_sphere.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tsukuru <tsukuru@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,25 +10,33 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "vec3.h"
+#include "minirt.h"
 #include <math.h>
 
-t_vec3	vec_add(t_vec3 a, t_vec3 b)
+int	hit_sphere(t_ray r, t_sphere sp, double *t_out, t_vec3 *n_out)
 {
-	return ((t_vec3){a.x + b.x, a.y + b.y, a.z + b.z});
-}
+	double	a;
+	double	b;
+	double	c;
+	double	disc;
+	double	t;
 
-t_vec3	vec_sub(t_vec3 a, t_vec3 b)
-{
-	return ((t_vec3){a.x - b.x, a.y - b.y, a.z - b.z});
-}
-
-t_vec3	vec_scale(t_vec3 v, double s)
-{
-	return ((t_vec3){v.x * s, v.y * s, v.z * s});
-}
-
-double	vec_dot(t_vec3 a, t_vec3 b)
-{
-	return (a.x * b.x + a.y * b.y + a.z * b.z);
+	r.origin = vec_sub(r.origin, sp.center);
+	a = vec_dot(r.dir, r.dir);
+	b = 2.0 * vec_dot(r.origin, r.dir);
+	c = vec_dot(r.origin, r.origin) - (sp.diameter * 0.5) * (sp.diameter * 0.5);
+	disc = b * b - 4 * a * c;
+	if (disc < 1e-9)
+		return (0);
+	t = (-b - sqrt(disc)) / (2 * a);
+	if (t <= 1e-4)
+		t = (-b + sqrt(disc)) / (2 * a);
+	if (t <= 1e-4)
+		return (0);
+	if (t_out)
+		*t_out = t;
+	if (n_out)
+		*n_out = vec_norm(vec_sub(vec_add(r.origin,
+						vec_scale(r.dir, t)), (t_vec3){0, 0, 0}));
+	return (1);
 }

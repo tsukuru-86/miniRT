@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   vec3.c                                             :+:      :+:    :+:   */
+/*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tsukuru <tsukuru@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,25 +10,25 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "vec3.h"
-#include <math.h>
+#ifndef PARSER_H
+# define PARSER_H
 
-t_vec3	vec_add(t_vec3 a, t_vec3 b)
-{
-	return ((t_vec3){a.x + b.x, a.y + b.y, a.z + b.z});
-}
+# include "minirt.h"
 
-t_vec3	vec_sub(t_vec3 a, t_vec3 b)
-{
-	return ((t_vec3){a.x - b.x, a.y - b.y, a.z - b.z});
-}
+int		parse_int(const char **s, int *out);
+int		parse_double(const char **s, double *out);
+int		parse_vec3(const char **s, t_vec3 *v);
+int		parse_color3(const char **s, t_color *c);
+void	skip_spaces(const char **s);
+int		set_error(const char *msg);
 
-t_vec3	vec_scale(t_vec3 v, double s)
-{
-	return ((t_vec3){v.x * s, v.y * s, v.z * s});
-}
+int		parse_ambient(const char *s, t_scene *sc);
+int		parse_camera(const char *s, t_scene *sc);
+int		parse_light(const char *s, t_scene *sc);
 
-double	vec_dot(t_vec3 a, t_vec3 b)
-{
-	return (a.x * b.x + a.y * b.y + a.z * b.z);
-}
+int		parse_sphere(const char *s, t_scene *sc);
+int		parse_plane(const char *s, t_scene *sc);
+int		parse_cylinder(const char *s, t_scene *sc);
+char	*read_file(int fd);
+
+#endif

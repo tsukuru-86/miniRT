@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   color.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tsukuru <tsukuru@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/19 18:55:00 by tsukuru           #+#    #+#             */
+/*   Updated: 2025/11/19 18:55:00 by tsukuru          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "color.h"
 
 t_color	color(int r, int g, int b)
@@ -5,30 +17,12 @@ t_color	color(int r, int g, int b)
 	return ((t_color){r, g, b});
 }
 
-t_color	rgb(int r, int g, int b)
+t_color	color_add(t_color c1, t_color c2)
 {
-	return (color(r, g, b));
-}
-
-t_color	color_mul(t_color a, t_color b)
-{
-	return (color(a.r * b.r, a.g * b.g, a.b * b.b));
+	return ((t_color){c1.r + c2.r, c1.g + c2.g, c1.b + c2.b});
 }
 
 t_color	color_scale(t_color c, double s)
 {
-	return (color(c.r * s, c.g * s, c.b * s));
-}
-
-t_color	color_add(t_color a, t_color b)
-{
-	return (color(a.r + b.r, a.g + b.g, a.b + b.b));
-}
-
-t_color	color_clamp(t_color c)
-{
-	if (c.r > 255) c.r = 255; if (c.r < 0) c.r = 0;
-	if (c.g > 255) c.g = 255; if (c.g < 0) c.g = 0;
-	if (c.b > 255) c.b = 255; if (c.b < 0) c.b = 0;
-	return (c);
+	return ((t_color){(int)(c.r * s), (int)(c.g * s), (int)(c.b * s)});
 }

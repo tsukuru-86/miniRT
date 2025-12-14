@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   vec3.c                                             :+:      :+:    :+:   */
+/*   intersect_plane.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tsukuru <tsukuru@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,25 +10,28 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "vec3.h"
+#include "minirt.h"
 #include <math.h>
 
-t_vec3	vec_add(t_vec3 a, t_vec3 b)
+int	hit_plane(t_ray r, t_plane pl, double *t_out, t_vec3 *n_out)
 {
-	return ((t_vec3){a.x + b.x, a.y + b.y, a.z + b.z});
-}
+	double	denom;
+	double	t;
 
-t_vec3	vec_sub(t_vec3 a, t_vec3 b)
-{
-	return ((t_vec3){a.x - b.x, a.y - b.y, a.z - b.z});
-}
-
-t_vec3	vec_scale(t_vec3 v, double s)
-{
-	return ((t_vec3){v.x * s, v.y * s, v.z * s});
-}
-
-double	vec_dot(t_vec3 a, t_vec3 b)
-{
-	return (a.x * b.x + a.y * b.y + a.z * b.z);
+	denom = vec_dot(pl.normal, r.dir);
+	if (fabs(denom) < 1e-8)
+		return (0);
+	t = vec_dot(vec_sub(pl.point, r.origin), pl.normal) / denom;
+	if (t <= 1e-4)
+		return (0);
+	if (t_out)
+		*t_out = t;
+	if (n_out)
+	{
+		if (denom < 0)
+			*n_out = pl.normal;
+		else
+			*n_out = vec_scale(pl.normal, -1.0);
+	}
+	return (1);
 }

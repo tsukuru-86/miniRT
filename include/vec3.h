@@ -1,14 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   vec3.h                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tsukuru <tsukuru@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/19 18:55:00 by tsukuru           #+#    #+#             */
+/*   Updated: 2025/11/19 18:55:00 by tsukuru          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef VEC3_H
 # define VEC3_H
 
-#include <math.h>
-
 typedef struct s_vec3
 {
-	double x;
-	double y;
-	double z;
-} t_vec3;
+	double	x;
+	double	y;
+	double	z;
+}	t_vec3;
 
 t_vec3	vec_add(t_vec3 a, t_vec3 b);
 t_vec3	vec_sub(t_vec3 a, t_vec3 b);
