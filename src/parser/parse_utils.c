@@ -74,5 +74,7 @@ int	parse_double(const char **s, double *out)
 	if (!any && frac == 0.0)
 		return (0);
 	*out = sign * (v + frac);
+	if (**s && **s != ' ' && **s != '\t' && **s != ',' && **s != '\n')
+		return (0);
 	return (1);
 }

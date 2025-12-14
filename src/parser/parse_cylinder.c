@@ -74,5 +74,8 @@ int	parse_cylinder(const char *s, t_scene *sc)
 	skip_spaces(&s);
 	if (!parse_color3(&s, &col))
 		return (set_error("Cylinder color"));
+	skip_spaces(&s);
+	if (*s)
+		return (set_error("Trailing garbage"));
 	return (append_cylinder(sc, (t_cylinder){center, axis, dia, h, col}));
 }

@@ -29,6 +29,6 @@ int		parse_light(const char *s, t_scene *sc);
 int		parse_sphere(const char *s, t_scene *sc);
 int		parse_plane(const char *s, t_scene *sc);
 int		parse_cylinder(const char *s, t_scene *sc);
-char	*read_file(int fd);
+char	*read_scene_file(const char *path);
 
 #endif

@@ -54,5 +54,8 @@ int	parse_sphere(const char *s, t_scene *sc)
 	skip_spaces(&s);
 	if (!parse_color3(&s, &col))
 		return (set_error("Sphere color"));
+	skip_spaces(&s);
+	if (*s)
+		return (set_error("Trailing garbage"));
 	return (append_sphere(sc, (t_sphere){center, dia, col}));
 }

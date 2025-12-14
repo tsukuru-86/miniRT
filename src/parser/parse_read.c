@@ -13,6 +13,8 @@
 #include "parser.h"
 #include <unistd.h>
 #include <stdlib.h>
+#include <fcntl.h>
+#include <stdio.h>
 
 static char	*append_data(char *data, char *buf, ssize_t n, size_t *len)
 {
@@ -58,16 +60,31 @@ static int	read_loop(int fd, char **data, size_t *len)
 	return (1);
 }
 
-char	*read_file(int fd)
+char	*read_scene_file(const char *path)
 {
 	char	*data;
 	size_t	len;
+	int		fd;
 
+	fd = open(path, O_RDONLY);
+	if (fd < 0)
+	{
+		perror("open");
+		return (NULL);
+	}
+	if (read(fd, NULL, 0) < 0)
+	{
+		perror("read");
+		close(fd);
+		return (NULL);
+	}
 	data = NULL;
 	len = 0;
 	if (!read_loop(fd, &data, &len))
+	{
+		close(fd);
 		return (NULL);
-	if (!data)
-		return (NULL);
+	}
+	close(fd);
 	return (data);
 }

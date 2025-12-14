@@ -31,6 +31,9 @@ int	parse_ambient(const char *s, t_scene *sc)
 	sc->ambient_ratio = ratio;
 	sc->ambient_color = col;
 	sc->has_ambient = 1;
+	skip_spaces(&s);
+	if (*s)
+		return (set_error("Trailing garbage"));
 	return (1);
 }
 
@@ -48,6 +51,19 @@ static int	parse_cam_vecs(const char **s, t_vec3 *pos, t_vec3 *dir)
 	return (1);
 }
 
+static void	set_camera(t_scene *sc, t_vec3 pos, t_vec3 dir, double fov)
+{
+	sc->cam.pos = pos;
+	sc->cam.dir = dir;
+	sc->cam.right = vec_norm(vec_cross(dir, (t_vec3){0, 1, 0}));
+	if (vec_len(sc->cam.right) < 1e-6)
+		sc->cam.right = vec_norm(vec_cross(dir, (t_vec3){0, 0, 1}));
+	sc->cam.up = vec_norm(vec_cross(sc->cam.right, dir));
+	sc->cam.fov = fov;
+	sc->cam.scale = tan((fov * M_PI / 180.0) * 0.5);
+	sc->has_camera = 1;
+}
+
 int	parse_camera(const char *s, t_scene *sc)
 {
 	t_vec3	pos;
@@ -63,15 +79,10 @@ int	parse_camera(const char *s, t_scene *sc)
 		return (set_error("Camera FOV"));
 	if (fov < 0.0 || fov > 180.0)
 		return (set_error("Camera FOV range"));
-	sc->cam.pos = pos;
-	sc->cam.dir = dir;
-	sc->cam.right = vec_norm(vec_cross(dir, (t_vec3){0, 1, 0}));
-	if (vec_len(sc->cam.right) < 1e-6)
-		sc->cam.right = vec_norm(vec_cross(dir, (t_vec3){0, 0, 1}));
-	sc->cam.up = vec_norm(vec_cross(sc->cam.right, dir));
-	sc->cam.fov = fov;
-	sc->cam.scale = tan((fov * M_PI / 180.0) * 0.5);
-	sc->has_camera = 1;
+	set_camera(sc, pos, dir, fov);
+	skip_spaces(&s);
+	if (*s)
+		return (set_error("Trailing garbage"));
 	return (1);
 }
 
@@ -98,5 +109,8 @@ int	parse_light(const char *s, t_scene *sc)
 	sc->light.ratio = ratio;
 	sc->light.color = col;
 	sc->has_light = 1;
+	skip_spaces(&s);
+	if (*s)
+		return (set_error("Trailing garbage"));
 	return (1);
 }

@@ -82,18 +82,28 @@ static int	process_lines(char *data, t_scene *out)
 	return (1);
 }
 
+static int	check_ext(const char *path)
+{
+	int	len;
+
+	len = 0;
+	while (path[len])
+		len++;
+	if (len < 3 || path[len - 3] != '.' || path[len - 2] != 'r'
+		|| path[len - 1] != 't')
+		return (set_error("File must end with .rt"));
+	return (1);
+}
+
 int	parse_scene(const char *path, t_scene *out)
 {
-	int		fd;
 	char	*data;
 
-	fd = open(path, O_RDONLY);
-	if (fd < 0)
-		return (perror("open"), 0);
-	data = read_file(fd);
-	close(fd);
+	if (!check_ext(path))
+		return (0);
+	data = read_scene_file(path);
 	if (!data)
-		return (set_error("empty file or malloc error"));
+		return (set_error("empty file or read error"));
 	init_scene(out);
 	if (!process_lines(data, out))
 	{

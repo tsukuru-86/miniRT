@@ -36,6 +36,8 @@ int	parse_int(const char **s, int *out)
 	if (!any)
 		return (0);
 	*out = (int)(sign * v);
+	if (**s && **s != ' ' && **s != '\t' && **s != ',' && **s != '\n')
+		return (0);
 	return (1);
 }
 
