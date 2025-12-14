@@ -3,9 +3,20 @@ CC      := cc
 CFLAGS  := -Wall -Wextra -Werror
 INCS    := -Iinclude
 
-MLX_DIR = lib/minilibx_opengl_20191021
-MLX_INC = -I$(MLX_DIR)
-MLX_LIB = -L$(MLX_DIR) -lmlx -framework OpenGL -framework AppKit -lm
+# Detect OS
+UNAME_S := $(shell uname -s)
+
+ifeq ($(UNAME_S),Darwin)
+    # macOS
+    MLX_DIR = lib/minilibx_opengl_20191021
+    MLX_INC = -I$(MLX_DIR)
+    MLX_LIB = -L$(MLX_DIR) -lmlx -framework OpenGL -framework AppKit -lm
+else
+    # Linux
+    MLX_DIR = lib/minilibx-linux
+    MLX_INC = -I$(MLX_DIR)
+    MLX_LIB = -L$(MLX_DIR) -lmlx -lXext -lX11 -lm
+endif
 
 SRCS := src/core/main.c src/core/vec3.c src/core/vec3_utils.c src/core/color.c src/core/color_utils.c \
 		src/rt/render.c src/rt/intersect_sphere.c src/rt/intersect_plane.c src/rt/intersect_cylinder.c \
